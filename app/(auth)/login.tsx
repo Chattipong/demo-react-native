@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Alert,
   KeyboardAvoidingView,
@@ -14,10 +14,29 @@ import {
 } from "react-native";
 import { auth } from "../../firebaseConfig";
 
+// Google Sign-In functions with safe loading
+const handleGoogleSignIn = async (): Promise<void> => {
+  Alert.alert(
+    "Google Sign-In ไม่พร้อมใช้งาน",
+    "Google Sign-In ต้องการ Development Build\n\nในตอนนี้ใช้ Email/Password login ได้ครับ\n\nEmail: user168@sample.com\nPassword: 123456",
+    [{ text: "ตกลง", style: "default" }]
+  );
+};
+
+const configureGoogleSignInSafely = async (): Promise<void> => {
+  // ปิด Google Sign-In ชั่วคราวสำหรับ Expo Go
+  console.log("Google Sign-In ถูกปิดชั่วคราวสำหรับ Expo Go");
+};
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // กำหนดค่า Google Sign-In เมื่อ component โหลด
+  useEffect(() => {
+    configureGoogleSignInSafely();
+  }, []);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -113,6 +132,17 @@ export default function Login() {
             </Text>
           </TouchableOpacity>
 
+          {/* ปุ่ม Google Sign-In */}
+          <TouchableOpacity
+            style={[styles.googleButton, loading && styles.buttonDisabled]}
+            onPress={handleGoogleSignIn}
+            disabled={loading}
+          >
+            <Text style={styles.googleButtonText}>
+              🔍 เข้าสู่ระบบด้วย Google
+            </Text>
+          </TouchableOpacity>
+
           <TouchableOpacity
             style={[styles.testButton]}
             onPress={() => {
@@ -197,6 +227,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#ccc",
   },
   buttonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  googleButton: {
+    backgroundColor: "#4285F4",
+    height: 50,
+    borderRadius: 12,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10,
+    borderWidth: 1,
+    borderColor: "#4285F4",
+  },
+  googleButtonText: {
     color: "white",
     fontSize: 18,
     fontWeight: "600",

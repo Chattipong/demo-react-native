@@ -8,13 +8,14 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Image,
 } from "react-native";
 import { auth } from "../../firebaseConfig";
 
 export default function ProfileScreen() {
   const [loading, setLoading] = useState(false);
   const user = auth.currentUser;
-
+  console.log(user.photoURL);
   const handleLogout = async () => {
     Alert.alert("ออกจากระบบ", "คุณต้องการออกจากระบบหรือไม่?", [
       {
@@ -44,11 +45,21 @@ export default function ProfileScreen() {
     <ScrollView style={styles.container}>
       <View style={styles.profileContainer}>
         <View style={styles.profileHeader}>
-          <View style={styles.avatar}>
-            <Text style={styles.avatarText}>
-              {user?.email?.charAt(0).toUpperCase() || "U"}
-            </Text>
-          </View>
+          {user?.photoURL ? (
+            <View style={styles.avatar}>
+              <Image
+                source={{ uri: user.photoURL }}
+                style={[styles.avatar, { marginBottom: 0 }]}
+                resizeMode="cover"
+              />
+            </View>
+          ) : (
+            <View style={styles.avatar}>
+              <Text style={styles.avatarText}>
+                {user?.email?.charAt(0).toUpperCase() || "U"}
+              </Text>
+            </View>
+          )}
           <Text style={styles.emailText}>{user?.email || "ไม่ระบุอีเมล"}</Text>
           <Text style={styles.statusText}>
             {user?.emailVerified

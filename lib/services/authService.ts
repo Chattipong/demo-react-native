@@ -2,10 +2,15 @@ import { router } from "expo-router";
 import { signOut } from "firebase/auth";
 import { Alert } from "react-native";
 import { auth } from "../../firebaseConfig";
+import { signOutGoogle } from "./googleAuthService";
 
 // ออกจากระบบ
 export const handleLogout = async (): Promise<void> => {
   try {
+    // Sign out จาก Google ก่อน (ถ้ามี)
+    await signOutGoogle();
+
+    // แล้วค่อย sign out จาก Firebase
     await signOut(auth);
     router.replace("/(auth)/login");
   } catch (error: any) {

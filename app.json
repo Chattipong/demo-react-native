@@ -10,7 +10,12 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.zeabix.demorn"
+      "bundleIdentifier": "com.chattipong.myapp",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "แอปนี้ต้องการเข้าถึงรูปภาพเพื่อให้คุณสามารถเลือกรูปโปรไฟล์หรือแชร์รูปภาพได้",
+        "NSCameraUsageDescription": "แอปนี้ต้องการเข้าถึงกล้องเพื่อให้คุณสามารถถ่ายรูปและแชร์รูปภาพได้",
+        "NSMicrophoneUsageDescription": "แอปนี้ต้องการเข้าถึงไมโครโฟนสำหรับการบันทึกเสียงและการโทร"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -18,7 +23,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.zeabix.demorn"
+      "package": "com.chattipong.myapp"
     },
     "web": {
       "bundler": "metro",
@@ -28,13 +33,19 @@
     "plugins": [
       "expo-router",
       [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
-        }
+      "expo-splash-screen",
+      {
+        "image": "./assets/images/splash-icon.png",
+        "imageWidth": 200,
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff"
+      }
+      ],
+      [
+      "@react-native-google-signin/google-signin",
+      {
+        "iosUrlScheme": "com.googleusercontent.apps.208504381449-bfr0dbqjhpk6i2l64knek1r61kq0bp8o"
+      }
       ]
     ],
     "experiments": {
