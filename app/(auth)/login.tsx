@@ -57,9 +57,8 @@ export default function Login() {
       );
       console.log("✅ Login successful! User:", userCredential.user.uid);
 
-      Alert.alert("สำเร็จ", "เข้าสู่ระบบแล้ว", [
-        { text: "ตกลง", onPress: () => router.replace("/(main)") },
-      ]);
+      // Navigate to restaurants screen
+      router.replace("/(main)/restaurants");
     } catch (error: any) {
       let errorMessage = "เกิดข้อผิดพลาดไม่ทราบสาเหตุ";
 

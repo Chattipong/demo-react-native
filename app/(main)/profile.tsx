@@ -11,11 +11,12 @@ import {
   Image,
 } from "react-native";
 import { auth } from "../../firebaseConfig";
+import SeedButton from "../../components/SeedButton";
 
 export default function ProfileScreen() {
   const [loading, setLoading] = useState(false);
   const user = auth.currentUser;
-  console.log(user.photoURL);
+
   const handleLogout = async () => {
     Alert.alert("ออกจากระบบ", "คุณต้องการออกจากระบบหรือไม่?", [
       {
@@ -98,6 +99,9 @@ export default function ProfileScreen() {
             </Text>
           </View>
         </View>
+
+        {/* Seed Database Button - For testing */}
+        <SeedButton />
 
         <View style={styles.actionsSection}>
           <TouchableOpacity

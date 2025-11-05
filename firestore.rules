@@ -1,0 +1,64 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    // ==================== RESTAURANTS ====================
+    // Anyone can read restaurants
+    // Only authenticated users can write (for demo/admin purposes)
+    match /restaurants/{restaurantId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+      
+      // Menus subcollection
+      match /menus/{menuId} {
+        allow read: if true;
+        allow write: if isSignedIn();
+      }
+    }
+    
+    // ==================== ORDERS ====================
+    // Users can only read their own orders
+    // Users can create orders
+    // Users can update their own orders (e.g., cancel)
+    match /orders/{orderId} {
+      allow read: if isSignedIn() && isOwner(resource.data.userId);
+      allow create: if isSignedIn() && isOwner(request.resource.data.userId);
+      allow update: if isSignedIn() && isOwner(resource.data.userId);
+      allow delete: if false; // Don't allow deletion
+    }
+    
+    // ==================== USERS ====================
+    // Users can read and write their own profile
+    match /users/{userId} {
+      allow read, write: if isSignedIn() && isOwner(userId);
+    }
+    
+    // ==================== CATEGORIES ====================
+    // Everyone can read categories
+    // Only authenticated users can write (for admin purposes)
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+    
+    // ==================== REVIEWS ====================
+    // Everyone can read reviews
+    // Users can create reviews for restaurants they ordered from
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if isSignedIn() && isOwner(request.resource.data.userId);
+      allow update: if isSignedIn() && isOwner(resource.data.userId);
+      allow delete: if isSignedIn() && isOwner(resource.data.userId);
+    }
+  }
+}
